@@ -1,9 +1,14 @@
 import { Box } from '@rocket.chat/fuselage';
+import type { MessageAttachmentDefault } from '@rocket.chat/core-typings';
 import type { ComponentPropsWithoutRef } from 'react';
 
-type AttachmentTextProps = ComponentPropsWithoutRef<typeof Box>;
+type AttachmentTextProps = ComponentPropsWithoutRef<typeof Box> & {
+    attachment?: MessageAttachmentDefault;
+    children?: React.ReactNode;
+};
 
-const AttachmentText = (props: AttachmentTextProps) => (
+
+const AttachmentText = ({ attachment, children, ...props }: AttachmentTextProps) => (
 	<Box
 		data-qa-type='message-attachment'
 		mbe={4}
@@ -16,7 +21,22 @@ const AttachmentText = (props: AttachmentTextProps) => (
 			overflowWrap: 'anywhere',
 		}}
 		{...props}
-	/>
+	>
+		{/* ✅ TEXT */}
+		{children}
+
+		{/* ✅ FOOTER */}
+		{attachment?.footer && (
+			<Box
+				fontScale='c1'
+				color='neutral-600'
+				marginBlockStart='x4'
+				style={{ opacity: 0.8 }}
+			>
+				{attachment.footer}
+			</Box>
+		)}
+	</Box>
 );
 
 export default AttachmentText;
